@@ -1,0 +1,18 @@
+
+EVAL Evaluating:%{GREEDYDATA:house.nugget.name}
+EVAL_WARN There is no motion state lookup for source %{GREEDYDATA:house.device.vendor}
+NUGGET %{EVAL}|%{EVAL_WARN}
+
+SENSOR Sensor:%{GREEDYDATA:house.device.vendor}:%{GREEDYDATA:house.device.name}:%{GREEDYDATA:house.device.id}:%{GREEDYDATA:house.device.type}:%{GREEDYDATA:house.device.state}
+SECURITY Security:%{GREEDYDATA:house.device.vendor}:%{GREEDYDATA:house.person.name} set house to %{GREEDYDATA:house.security.state}
+
+TRIGGER_SENSOR Trigger:%{GREEDYDATA:house.device.vendor} %{GREEDYDATA:house.device.name} %{GREEDYDATA:house.device.id} is now %{GREEDYDATA:house.device.state}
+TRIGGER_STATE Trigger:%{GREEDYDATA:house.trigger.name} %{GREEDYDATA:house.trigger.id} %{GREEDYDATA:house.trigger.state}
+TRIGGER %{TRIGGER_SENSOR}|%{TRIGGER_STATE}
+
+ACTION_STATE Action:%{GREEDYDATA:house.action.name}:%{GREEDYDATA:house.nugget.name}:%{GREEDYDATA:house.action.enabled}
+ACTION %{ACTION_STATE}
+
+HVAC Hvac:%{GREEDYDATA:house.hvac.name}:%{GREEDYDATA:house.hvac.setting} changed from %{GREEDYDATA:house.hvac.oldValue} to %{GREEDYDATA:house.hvac.newValue}
+
+HOUSE %{ACTION}|%{TRIGGER}|%{SENSOR}|%{SECURITY}|%{NUGGET}|%{HVAC}
